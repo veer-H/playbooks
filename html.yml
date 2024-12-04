@@ -1,0 +1,44 @@
+---
+- name: Deploy Apache2 Web Server with Sample Project
+  hosts: all
+  become: true
+  tasks:
+    - name: Update the apt package index
+      apt:
+        update_cache: yes
+
+    - name: Install Apache2 web server
+      apt:
+        name: apache2
+        state: present
+
+    - name: Download sample project files
+      get_url:
+        url: "https://github.com/veer-H/assignment/archive/refs/heads/main.zip"  # Replace with the actual URL
+        dest: /tmp/sample_project.zip
+
+    - name: Unzip the sample project files
+      ansible.builtin.unarchive:
+        src: /tmp/sample_project.zip
+        dest: /var/www/html/
+        remote_src: yes
+
+    - name: Set correct permissions for Apache document root
+      file:
+        path: /var/www/html/
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: '0755'
+        recurse: yes
+
+    - name: Ensure Apache service is running and enabled
+      service:
+        name: apache2
+        state: started
+        enabled: true
+
+    - name: Display the private IP address of the managed node
+      debug:
+        msg: "Access the web application at http://{{ ansible_default_ipv4.address }}/"
+

@@ -1,0 +1,12 @@
+---
+
+- name: Install Java 17 on Production Servers
+  hosts: all
+  become: yes
+
+
+  tasks:
+    - name: Install OpenJDK 17
+      apt:
+        name: openjdk-17-jdk
+        state: present

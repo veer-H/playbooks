@@ -1,0 +1,35 @@
+---
+
+- name: Gather System Information
+  hosts: all
+  gather_facts: yes
+
+  tasks:
+    - name: Gather user information
+      shell: whoami
+      register: current_user
+
+    - name: Gather system uptime
+      shell: uptime
+      register: system_uptime
+
+    - name: Gather CPU information
+      shell: cat /proc/cpuinfo
+      register: cpu_info
+
+    - name: Gather disk space
+      shell: df -h
+      register: disk_space
+
+    - name: Gather memory usage
+      shell: free -h
+      register: memory_usage
+
+    - name: Print gathered information
+      debug:
+        msg:
+          - "Current user: {{ current_user.stdout }}"
+          - "System uptime: {{ system_uptime.stdout }}"
+          - "CPU information: {{ cpu_info.stdout }}"
+          - "Disk space: {{ disk_space.stdout }}"
+          - "Memory usage: {{ memory_usage.stdout }}"

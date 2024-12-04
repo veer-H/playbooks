@@ -1,0 +1,19 @@
+---
+- name: Get Date and User Information
+  hosts: all
+  gather_facts: yes
+
+  tasks:
+    - name: Get Current Date
+      shell: date
+      register: current_date
+
+    - name: Get Logged-in User
+      shell: whoami
+      register: current_user
+
+    - name: Display Information
+      debug:
+        msg:
+          - "Current Date: {{ current_date.stdout }}"
+          - "Logged-in User: {{ current_user.stdout }}"

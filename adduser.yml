@@ -1,0 +1,23 @@
+---
+- name: Add Users
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Add user1
+      user:
+        name: user1
+        append: yes
+        groups: users
+        home: /home/user1
+        state: present
+
+    - name: Add user2
+      user:
+        name: user2
+        append: yes
+        groups: users
+        home: /home/user2
+        state: present
+
+
