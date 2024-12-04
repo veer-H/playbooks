@@ -1,5 +1,5 @@
 ---
-- name: Deploy Apache2 Web Server with Sample Project
+- name: Deploy Apache2 Web Server with Local Files
   hosts: all
   become: true
   tasks:
@@ -12,25 +12,13 @@
         name: apache2
         state: present
 
-    - name: Download sample project files
-      get_url:
-        url: "https://github.com/veer-H/assignment/archive/refs/heads/main.zip"  # Replace with the actual URL
-        dest: /tmp/sample_project.zip
-
-    - name: Unzip the sample project files
-      ansible.builtin.unarchive:
-        src: /tmp/sample_project.zip
-        dest: /var/www/html/
-        remote_src: yes
-
-    - name: Set correct permissions for Apache document root
-      file:
-        path: /var/www/html/
-        state: directory
+    - name: Copy local index.html to the Apache document root
+      copy:
+        src: /home/ubuntu/assignment/index.html  # Replace with the actual path to index.html
+        dest: /var/www/html/index.html
         owner: www-data
         group: www-data
-        mode: '0755'
-        recurse: yes
+        mode: '0644'
 
     - name: Ensure Apache service is running and enabled
       service:
